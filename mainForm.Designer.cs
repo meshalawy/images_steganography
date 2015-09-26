@@ -1,6 +1,6 @@
 ﻿namespace images_steganography
 {
-    partial class Form1
+    partial class mainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.styleManager1 = new DevComponents.DotNetBar.StyleManager(this.components);
             this.balloonTip1 = new DevComponents.DotNetBar.BalloonTip();
             this.styleManager2 = new DevComponents.DotNetBar.StyleManager(this.components);

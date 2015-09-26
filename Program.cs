@@ -22,7 +22,7 @@ namespace images_steganography
             Application.SetCompatibleTextRenderingDefault(false);
             steganography_form = new Steganography_form();
             unsteganography_form = new Unsteganography_form();
-            Application.Run(new Form1());
+            Application.Run(new mainForm());
         }
     }
 }

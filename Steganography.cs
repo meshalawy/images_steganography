@@ -133,10 +133,6 @@ namespace images_steganography
 
             var bitsArray = new Boolean[numberOfBits];
             var pointer = 0;
-
-            Stopwatch xxx = new Stopwatch();
-            xxx.Start();
-            System.Diagnostics.Debug.Print("start read image");
             for (int y = 0; y < hostImage.Height; y++)
             {
                 for (int x = 0; x < hostImage.Width; x++)
@@ -155,9 +151,7 @@ namespace images_steganography
                     }
                 }
             }
-            xxx.Stop();
-            MessageBox.Show ("finished " + xxx.ElapsedMilliseconds);
-
+            
             byte[] allBytes = new BitArray(bitsArray).getBytes();
 
             byte[] HeaderBytes = allBytes.Take(HeaderLength).ToArray();
