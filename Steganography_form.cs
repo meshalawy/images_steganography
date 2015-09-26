@@ -24,6 +24,11 @@ namespace images_steganography
                 this.encryptionType.SelectedIndexChanged += new EventHandler(encryptionType_changed);
             }
 
+            private void textOption_CheckedChanged(object sender, EventArgs e)
+            {
+                textData.Enabled = textOption.Checked;
+            }
+
             private void selectHostImageButton_Click(object sender, EventArgs e)
             {
                 if (selectHostImageDialog.ShowDialog() == DialogResult.OK)
@@ -136,5 +141,6 @@ namespace images_steganography
                 updatePreviews();
             }
         #endregion
+
     }
 }

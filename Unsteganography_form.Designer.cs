@@ -50,7 +50,6 @@
             this.encryptionType = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.hostImagePath = new System.Windows.Forms.TextBox();
             this.NumberOfBitsInput = new System.Windows.Forms.NumericUpDown();
             this.selectHostImageButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -61,6 +60,7 @@
             this.selectHostImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExtractedDataAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
+            this.hostImagePath = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -185,6 +185,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.encryptionPassword);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.OpenExtractedFile);
@@ -196,7 +197,6 @@
             this.groupBox2.Controls.Add(this.encryptionType);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.NumberOfBitsInput);
             this.groupBox2.Controls.Add(this.selectHostImageButton);
             this.groupBox2.Controls.Add(this.label3);
@@ -332,15 +332,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Host Image:";
             // 
-            // hostImagePath
-            // 
-            this.hostImagePath.Location = new System.Drawing.Point(105, 17);
-            this.hostImagePath.Name = "hostImagePath";
-            this.hostImagePath.ReadOnly = true;
-            this.hostImagePath.Size = new System.Drawing.Size(210, 20);
-            this.hostImagePath.TabIndex = 1;
-            this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
-            // 
             // NumberOfBitsInput
             // 
             this.NumberOfBitsInput.Location = new System.Drawing.Point(105, 85);
@@ -368,7 +359,7 @@
             // 
             this.selectHostImageButton.Image = ((System.Drawing.Image)(resources.GetObject("selectHostImageButton.Image")));
             this.selectHostImageButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.selectHostImageButton.Location = new System.Drawing.Point(321, 15);
+            this.selectHostImageButton.Location = new System.Drawing.Point(105, 15);
             this.selectHostImageButton.Name = "selectHostImageButton";
             this.selectHostImageButton.Size = new System.Drawing.Size(69, 23);
             this.selectHostImageButton.TabIndex = 3;
@@ -461,6 +452,15 @@
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
             // 
+            // hostImagePath
+            // 
+            this.hostImagePath.AutoEllipsis = true;
+            this.hostImagePath.Location = new System.Drawing.Point(189, 20);
+            this.hostImagePath.Name = "hostImagePath";
+            this.hostImagePath.Size = new System.Drawing.Size(135, 23);
+            this.hostImagePath.TabIndex = 29;
+            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // Unsteganography_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -499,7 +499,6 @@
 
         private System.Windows.Forms.Button selectHostImageButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox hostImagePath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox blueCheckbox;
         private System.Windows.Forms.CheckBox greenCheckbox;
@@ -529,6 +528,7 @@
         private System.Windows.Forms.Button OpenExtractedFile;
         private System.Windows.Forms.TextBox encryptionPassword;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label hostImagePath;
     }
 }
 

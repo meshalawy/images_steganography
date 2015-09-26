@@ -40,11 +40,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.hostImagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.hostImagePath = new System.Windows.Forms.Label();
             this.encryptionPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
-            this.fileOptionFilePath = new System.Windows.Forms.TextBox();
             this.importTextFromFileButton = new System.Windows.Forms.Button();
             this.textData = new System.Windows.Forms.TextBox();
             this.fileOption = new System.Windows.Forms.RadioButton();
@@ -54,7 +54,6 @@
             this.encryptionType = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.hostImagePath = new System.Windows.Forms.TextBox();
             this.NumberOfBitsInput = new System.Windows.Forms.NumericUpDown();
             this.selectHostImageButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -67,6 +66,7 @@
             this.selectTextFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveModifiedImageAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
+            this.fileOptionFilePath = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modifiedImagePreview)).BeginInit();
@@ -210,6 +210,7 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.encryptionPassword);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.panel2);
@@ -217,7 +218,6 @@
             this.groupBox2.Controls.Add(this.encryptionType);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.NumberOfBitsInput);
             this.groupBox2.Controls.Add(this.selectHostImageButton);
             this.groupBox2.Controls.Add(this.label3);
@@ -231,6 +231,16 @@
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
+            // 
+            // hostImagePath
+            // 
+            this.hostImagePath.AutoEllipsis = true;
+            this.hostImagePath.Location = new System.Drawing.Point(189, 20);
+            this.hostImagePath.Name = "hostImagePath";
+            this.hostImagePath.Size = new System.Drawing.Size(135, 23);
+            this.hostImagePath.TabIndex = 21;
+            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // encryptionPassword
             // 
@@ -254,8 +264,8 @@
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.fileOptionFilePath);
+            this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.importTextFromFileButton);
             this.panel2.Controls.Add(this.textData);
             this.panel2.Controls.Add(this.fileOption);
@@ -274,15 +284,6 @@
             this.label6.Size = new System.Drawing.Size(74, 13);
             this.label6.TabIndex = 15;
             this.label6.Text = "Data To Hide:";
-            // 
-            // fileOptionFilePath
-            // 
-            this.fileOptionFilePath.Location = new System.Drawing.Point(87, 22);
-            this.fileOptionFilePath.Name = "fileOptionFilePath";
-            this.fileOptionFilePath.ReadOnly = true;
-            this.fileOptionFilePath.Size = new System.Drawing.Size(210, 20);
-            this.fileOptionFilePath.TabIndex = 13;
-            this.fileOptionFilePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // importTextFromFileButton
             // 
@@ -326,7 +327,7 @@
             // 
             this.selectFileForFileOption.Image = ((System.Drawing.Image)(resources.GetObject("selectFileForFileOption.Image")));
             this.selectFileForFileOption.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.selectFileForFileOption.Location = new System.Drawing.Point(315, 20);
+            this.selectFileForFileOption.Location = new System.Drawing.Point(87, 20);
             this.selectFileForFileOption.Name = "selectFileForFileOption";
             this.selectFileForFileOption.Size = new System.Drawing.Size(69, 23);
             this.selectFileForFileOption.TabIndex = 14;
@@ -346,7 +347,7 @@
             this.textOption.TabStop = true;
             this.textOption.Text = "Text:";
             this.textOption.UseVisualStyleBackColor = true;
-            this.textOption.CheckedChanged += new System.EventHandler(this.optionsChanged);
+            this.textOption.CheckedChanged += new System.EventHandler(this.textOption_CheckedChanged);
             // 
             // alphaCheckbox
             // 
@@ -392,15 +393,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Host Image:";
             // 
-            // hostImagePath
-            // 
-            this.hostImagePath.Location = new System.Drawing.Point(105, 17);
-            this.hostImagePath.Name = "hostImagePath";
-            this.hostImagePath.ReadOnly = true;
-            this.hostImagePath.Size = new System.Drawing.Size(210, 20);
-            this.hostImagePath.TabIndex = 1;
-            this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
-            // 
             // NumberOfBitsInput
             // 
             this.NumberOfBitsInput.Location = new System.Drawing.Point(105, 85);
@@ -428,7 +420,7 @@
             // 
             this.selectHostImageButton.Image = ((System.Drawing.Image)(resources.GetObject("selectHostImageButton.Image")));
             this.selectHostImageButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.selectHostImageButton.Location = new System.Drawing.Point(321, 15);
+            this.selectHostImageButton.Location = new System.Drawing.Point(105, 15);
             this.selectHostImageButton.Name = "selectHostImageButton";
             this.selectHostImageButton.Size = new System.Drawing.Size(69, 23);
             this.selectHostImageButton.TabIndex = 3;
@@ -530,6 +522,16 @@
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
             // 
+            // fileOptionFilePath
+            // 
+            this.fileOptionFilePath.AutoEllipsis = true;
+            this.fileOptionFilePath.Location = new System.Drawing.Point(162, 24);
+            this.fileOptionFilePath.Name = "fileOptionFilePath";
+            this.fileOptionFilePath.Size = new System.Drawing.Size(135, 23);
+            this.fileOptionFilePath.TabIndex = 22;
+            this.fileOptionFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.fileOptionFilePath.TextChanged += new System.EventHandler(this.optionsChanged);
+            // 
             // Steganography_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -568,7 +570,6 @@
 
         private System.Windows.Forms.Button selectHostImageButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox hostImagePath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox blueCheckbox;
         private System.Windows.Forms.CheckBox greenCheckbox;
@@ -580,7 +581,6 @@
         private System.Windows.Forms.RadioButton textOption;
         private System.Windows.Forms.Button importTextFromFileButton;
         private System.Windows.Forms.Button selectFileForFileOption;
-        private System.Windows.Forms.TextBox fileOptionFilePath;
         private System.Windows.Forms.OpenFileDialog selectHostImageDialog;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label6;
@@ -604,6 +604,8 @@
         private DevComponents.DotNetBar.Controls.WarningBox warningBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox encryptionPassword;
+        private System.Windows.Forms.Label hostImagePath;
+        private System.Windows.Forms.Label fileOptionFilePath;
     }
 }
 
