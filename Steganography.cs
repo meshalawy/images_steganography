@@ -26,7 +26,6 @@ namespace images_steganography
                * 2- Data: The actual data to be hided in the image (either encrypted or not).
                */
 
-
         private const int HeaderLength = 16;
         public static Bitmap hideData(Bitmap hostImage, Byte[] data, string dataType,
                 bool useRed, bool useGreen, bool useBlue, bool useAlpha,
@@ -34,49 +33,57 @@ namespace images_steganography
                 bool aesEncryption, 
                 string encryptionPassword)
         {
-            //First, check the available size and decide whether the image can fit data or not.
-            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
-            var colorsCount = colorsToUse.Count(b => b);
-            var blockSize = aesEncryption ? 16 : 1;  //Aes block size = 16 byte
-            var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsCount;
-            var ImageMaxNumberOfBlocks = Math.Floor((Double)(numberOfBits / 8 / blockSize));
-            var dataNumberOfBlocks = Math.Ceiling ((Double)(data.Length + HeaderLength)/blockSize);
-            if (ImageMaxNumberOfBlocks < dataNumberOfBlocks)
-                throw new ArgumentException("Data can not be fit in image with the selected options. This may cause a corrupted file when extracting. The maximum size is: " + getHumanReadableFileSizeString((ImageMaxNumberOfBlocks * blockSize) - 9));
 
+            if (aesEncryption)
+                data = AES_Encryption.AES_Encrypt(data, encryptionPassword);
 
-            //Field 1
-            //Data Size Field: Integers are 32 bits.
-            BitArray bitsForDataSizeField = new BitArray(System.BitConverter.GetBytes(data.Length));
-
-            //Field 2:
-            //Data Type Field: Must ensure not to exceed 12 bytes. Also must ensure to fill the remaining bits in case of shorter extensions. 
-            //Length of data type field = 96
-            BitArray bitsForDataTypeField = new BitArray(Encoding.ASCII.GetBytes(dataType));
-            if (bitsForDataTypeField.Count > 96)
-                throw new ArgumentException("File extensions longer than 12 bytes (12 letters) are not supported.");
-            else if (bitsForDataTypeField.Count < 96)
+            //Data Type Field: Must ensure not to exceed 10 bytes. Also must ensure to fill the remaining bits in case of shorter extensions. 
+            Byte[] dataTypeBytes = Encoding.ASCII.GetBytes(dataType);
+            if (dataTypeBytes.Length > 10)
+                throw new ArgumentException("File extensions longer than 10 bytes (10 letters) are not supported.");
+            else if (dataTypeBytes.Length <10)
             {
-                bool[] array = new bool[96];
-                bitsForDataTypeField.CopyTo(array, 0);
-                bitsForDataTypeField = new BitArray(array);
+                //padding to fill the empty files.
+                byte[] temp = new byte[10];
+                dataTypeBytes.CopyTo(temp, 0);
+                dataTypeBytes = temp;
             }
 
-            //Concatenating header, then encrypt it if required.
-            BitArray bitsForHeader = bitsForDataSizeField.Append(bitsForDataTypeField);
+            //Data Size Field: Integers are 32 bits.
+            //If data has been encrypted, then this is the length of the encrypted data
+            byte[] dataSizeBytes = System.BitConverter.GetBytes(data.Length);
+
+            //Concatenating the two fields into one array representing header, then encrypt it if required.
+            byte[] headerBytes = dataSizeBytes.Concat(dataTypeBytes).ToArray();
             if (aesEncryption)
-                bitsForHeader = new BitArray(AES_Encryption.AES_Encrypt(bitsForHeader.getBytes(), encryptionPassword));
+                headerBytes = AES_Encryption.AES_Encrypt(headerBytes, encryptionPassword);
 
+            //padding the extra empty bytes in case of no encryption
+            else if (headerBytes.Length < HeaderLength)
+                headerBytes= headerBytes.Concat(new byte[HeaderLength - headerBytes.Length]).ToArray();
+            
 
-            // Last part, the data itself
-            // get the BitArray for the data
-            BitArray bitsForData = new BitArray(data);
-            if (aesEncryption)
-                bitsForData = new BitArray(AES_Encryption.AES_Encrypt(bitsForData.getBytes(), encryptionPassword));
+            //header must be exactly 16 bytes
+            if (headerBytes.Length != 16)
+                throw new ArgumentException(String.Format
+                    ("Header should be 16 bytes length but found %s bytes. Contact the developer. Data size is: %s, Data Type is: %s",
+                    headerBytes.Length, data.Length, dataType)); 
 
+            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
+            var colorsCount = colorsToUse.Count(b => b);
+            var maxBytes = (hostImage.Width * hostImage.Height * bitsPerByte * colorsCount) / 8;
 
+            if (maxBytes < headerBytes.Length + data.Length)
+            {
+                //finding the max possible size
+                var blockSize = aesEncryption ? 16 : 1;
+                var maxBlocks = Math.Floor((double)(maxBytes - headerBytes.Length) / blockSize);
+                var maxSize = (maxBlocks * blockSize) - 1;
+                throw new ArgumentException("Data can not be fit in image with the selected options. This may cause a corrupted file when extracting. The maximum size is: " + getHumanReadableFileSizeString(maxSize));
+            }
+                
             //Concatenating all parts to one single BitArray in order to write it. 
-            BitArray allBits = bitsForHeader.Append(bitsForData);
+            BitArray allBits = new BitArray(headerBytes.Concat(data).ToArray());
 
             //start writing allBits accross all pixels (line by line of pixels) on the selected colors and size 
             int index = 0;
