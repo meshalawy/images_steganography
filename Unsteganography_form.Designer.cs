@@ -39,6 +39,7 @@
             this.hostImagePreview = new System.Windows.Forms.PictureBox();
             this.extractedImagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.hostImagePath = new System.Windows.Forms.Label();
             this.encryptionPassword = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.OpenExtractedFile = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@
             this.selectHostImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExtractedDataAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
-            this.hostImagePath = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -210,6 +210,16 @@
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
+            // 
+            // hostImagePath
+            // 
+            this.hostImagePath.AutoEllipsis = true;
+            this.hostImagePath.Location = new System.Drawing.Point(189, 20);
+            this.hostImagePath.Name = "hostImagePath";
+            this.hostImagePath.Size = new System.Drawing.Size(135, 23);
+            this.hostImagePath.TabIndex = 29;
+            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // encryptionPassword
             // 
@@ -451,15 +461,6 @@
             this.warningBox1.TabIndex = 26;
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
-            // 
-            // hostImagePath
-            // 
-            this.hostImagePath.AutoEllipsis = true;
-            this.hostImagePath.Location = new System.Drawing.Point(189, 20);
-            this.hostImagePath.Name = "hostImagePath";
-            this.hostImagePath.Size = new System.Drawing.Size(135, 23);
-            this.hostImagePath.TabIndex = 29;
-            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // Unsteganography_form
             // 
