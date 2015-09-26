@@ -96,7 +96,11 @@ namespace images_steganography
                     return;
                 }
 
-                hostImage = new Bitmap(hostImagePath.Text);
+                using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open))
+                {
+                    var bmp = new Bitmap(fs);
+                    hostImage = (Bitmap)bmp.Clone();
+                }
                 extractedData = null;
                 try
                 {
