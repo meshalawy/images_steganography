@@ -109,7 +109,7 @@ namespace images_steganography
                     return;
                 }
 
-                using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open))
+                using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open, FileAccess.Read))
                 {
                     var bmp = new Bitmap(fs);
                     hostImage = (Bitmap)bmp.Clone();
