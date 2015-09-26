@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
 
 namespace images_steganography
 {
@@ -64,7 +66,7 @@ namespace images_steganography
             
 
             //header must be exactly 16 bytes
-            if (headerBytes.Length != 16)
+            if (headerBytes.Length != HeaderLength)
                 throw new ArgumentException(String.Format
                     ("Header should be 16 bytes length but found %s bytes. Contact the developer. Data size is: %s, Data Type is: %s",
                     headerBytes.Length, data.Length, dataType)); 
@@ -123,17 +125,18 @@ namespace images_steganography
         {   
             bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
             var colorsCount = colorsToUse.Count(b => b);
-            var blockSize = aesEncryption ? 16 : 1;  //Aes block size = 16 byte
             var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsCount;
-            var ImageMaxNumberOfBlocks = Math.Floor((Double)(numberOfBits / 8 / blockSize));
-            var headerNumberOfBlocks = Math.Ceiling((Double)(HeaderLength/blockSize));
-
+           
             //at least it should be bigger than header length
-            if (ImageMaxNumberOfBlocks < headerNumberOfBlocks )
+            if (numberOfBits /8  < HeaderLength)
                 throw new ArgumentException("Can not extract data using the selected options. Try to enlarge the bit options.");
 
-            var bitsArray = new Boolean[(int)ImageMaxNumberOfBlocks * blockSize * 8];
+            var bitsArray = new Boolean[numberOfBits];
             var pointer = 0;
+
+            Stopwatch xxx = new Stopwatch();
+            xxx.Start();
+            System.Diagnostics.Debug.Print("start read image");
             for (int y = 0; y < hostImage.Height; y++)
             {
                 for (int x = 0; x < hostImage.Width; x++)
@@ -152,32 +155,32 @@ namespace images_steganography
                     }
                 }
             }
+            xxx.Stop();
+            MessageBox.Show ("finished " + xxx.ElapsedMilliseconds);
 
-            var allBits = new BitArray(bitsArray);
+            byte[] allBytes = new BitArray(bitsArray).getBytes();
 
-            var bitsForHeader = new BitArray(allBits.getRange(0,(int) headerNumberOfBlocks * blockSize * 8));
+            byte[] HeaderBytes = allBytes.Take(HeaderLength).ToArray();
             if (aesEncryption)
-                bitsForHeader = new BitArray(AES_Encryption.AES_Encrypt(bitsForHeader.getBytes(), encryptionPassword));
+                HeaderBytes = AES_Encryption.AES_Decrypt(HeaderBytes, encryptionPassword);
 
-            var dataSize = getIntFromBooleanArray(bitsForHeader.getRange(0, 32).ToArray());
-            var dataNumberOfBlocks = Math.Ceiling((Double) (dataSize/blockSize));
+            var dataSize = BitConverter.ToInt32(HeaderBytes, 0);
+            string dataType = Encoding.ASCII.GetString(HeaderBytes.Skip(4).Take(10).ToArray()).TrimEnd('\0');
 
-            //The ramaining blocks should fit the data size;
+            //The ramaining bytes should fit the data size;
             if (dataSize<0 ||
-                (ImageMaxNumberOfBlocks - headerNumberOfBlocks)< dataNumberOfBlocks )
+                (allBytes.Length - HeaderBytes.Length)< dataSize )
                 throw new ArgumentException("Can not extract data using the selected options. Try to change colors and bit options.");
-
-            string dataType = Encoding.ASCII.GetString(getBytesFromBooleanArray(bitsForHeader.getRange(32, 96).ToArray())).TrimEnd('\0');
 
             //check illegal characters in data type (extension) because wrong options can generate unexpected data in data type field.
             if (dataType.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
                 throw new ArgumentException("Found illegale and wrong data type!. Typically this occures due to the wrong options.");
 
-            var bitsForData = new BitArray(allBits.getRange(HeaderLength * 8, (int) dataNumberOfBlocks * blockSize * 8));
+            byte[] dataBytes = allBytes.Skip(16).Take(dataSize).ToArray();
             if(aesEncryption)
-                bitsForData = new BitArray(AES_Encryption.AES_Encrypt(bitsForData.getBytes(), encryptionPassword));
+                dataBytes = AES_Encryption.AES_Decrypt(dataBytes, encryptionPassword);
 
-            return new Tuple<byte[], string>(bitsForData.getBytes(), dataType);
+            return new Tuple<byte[], string>(dataBytes, dataType);
         }
 
         private static byte changeBitInByte(byte originalByte, int bitIndex, bool newBitValue)
@@ -189,27 +192,6 @@ namespace images_steganography
         private static bool getBit(byte b, int bitNumber)
         {
             return (b & (1 << bitNumber)) != 0;
-        }
-
-        private static int getIntFromBooleanArray(Boolean[] boolArray)
-        {
-            if (boolArray.Length > 32)
-                throw new ArgumentException("Argument length shall be at most 32 bits.");
-            BitArray ba = new BitArray(boolArray);
-            int[] array = new int[1];
-            ba.CopyTo(array, 0);
-            return array[0];
-        }
-
-        private static byte[] getBytesFromBooleanArray(Boolean[] boolArray)
-        {
-            if (boolArray.Length % 8 != 0)
-                throw new ArgumentException("bits count should be multiple of 8");
-
-            BitArray ba = new BitArray(boolArray);
-            byte[] bytes = new byte[boolArray.Length / 8];
-            ba.CopyTo(bytes, 0);
-            return bytes;
         }
 
         private static string getHumanReadableFileSizeString(double bytesCount)
