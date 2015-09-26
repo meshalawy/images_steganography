@@ -61,6 +61,7 @@
             this.selectHostImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExtractedDataAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
+            this.loading = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -70,6 +71,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loading)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -123,6 +125,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.loading);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(431, 3);
@@ -462,6 +465,17 @@
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
             // 
+            // loading
+            // 
+            this.loading.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loading.Image = ((System.Drawing.Image)(resources.GetObject("loading.Image")));
+            this.loading.Location = new System.Drawing.Point(386, 2);
+            this.loading.Name = "loading";
+            this.loading.Size = new System.Drawing.Size(34, 32);
+            this.loading.TabIndex = 30;
+            this.loading.TabStop = false;
+            this.loading.Visible = false;
+            // 
             // Unsteganography_form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -492,6 +506,7 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loading)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -530,6 +545,7 @@
         private System.Windows.Forms.TextBox encryptionPassword;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label hostImagePath;
+        private System.Windows.Forms.PictureBox loading;
     }
 }
 

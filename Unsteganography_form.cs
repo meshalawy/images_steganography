@@ -84,15 +84,28 @@ namespace images_steganography
             private void encryptionType_changed(object sender, EventArgs e)
             {
                 this.encryptionPassword.Enabled = (this.encryptionType.SelectedIndex > 0);
-            }  
+            }
 
+            BackgroundWorker bw = new BackgroundWorker();
             private void optionsChanged(object sender, EventArgs e)
+            {
+                bw.WorkerSupportsCancellation = true;
+                warningBox1.Hide();
+                bw.CancelAsync();
+                bw = new BackgroundWorker();
+                bw.WorkerSupportsCancellation = true;
+                bw.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bw_DoWork);
+                bw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bw_RunWorkerCompleted);
+                bw.RunWorkerAsync(bw);
+                loading.Show();
+            }
+
+            private void bw_DoWork(object sender, DoWorkEventArgs e)
             {
                 if (hostImagePath.Text.Length == 0)
                 {
                     hostImage = null;
                     extractedData = null;
-                    updatePreviews();
                     return;
                 }
 
@@ -104,7 +117,12 @@ namespace images_steganography
                 extractedData = null;
                 try
                 {
-                    bool aesEncryption = encryptionType.SelectedIndex == 1;
+                    bool aesEncryption = false;
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        aesEncryption = encryptionType.SelectedIndex == 1;
+                    });
+
                     extractedData = Steganography.extractData(hostImage,
                             redCheckbox.Checked,
                             greenCheckbox.Checked,
@@ -113,15 +131,26 @@ namespace images_steganography
                             (int)NumberOfBitsInput.Value,
                             aesEncryption,
                             encryptionPassword.Text);
-                    
-                    warningBox1.Hide();
                 }
                 catch (Exception ex)
                 {
-                    warningBox1.Text = ex.Message;
+                    e.Result = ex;
+                }
+                e.Cancel = ((BackgroundWorker)e.Argument).CancellationPending;
+            }
+
+            private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+            {
+                if (e.Cancelled)
+                    return;
+
+                if (e.Result != null && e.Result is Exception)
+                {
+                    warningBox1.Text = ((Exception)e.Result).Message;
                     warningBox1.Show();
                 }
                 updatePreviews();
+                loading.Hide();
             }
 
             private void OpenExtractedFile_Click(object sender, EventArgs e)

@@ -44,6 +44,7 @@
             this.encryptionPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.fileOptionFilePath = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.importTextFromFileButton = new System.Windows.Forms.Button();
             this.textData = new System.Windows.Forms.TextBox();
@@ -66,7 +67,7 @@
             this.selectTextFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveModifiedImageAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
-            this.fileOptionFilePath = new System.Windows.Forms.Label();
+            this.loading = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.modifiedImagePreview)).BeginInit();
@@ -76,6 +77,7 @@
             this.groupBox2.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loading)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -128,6 +130,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.loading);
             this.panel1.Controls.Add(this.saveAsButton);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.showOriginalImage);
@@ -275,6 +278,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(401, 194);
             this.panel2.TabIndex = 16;
+            // 
+            // fileOptionFilePath
+            // 
+            this.fileOptionFilePath.AutoEllipsis = true;
+            this.fileOptionFilePath.Location = new System.Drawing.Point(162, 24);
+            this.fileOptionFilePath.Name = "fileOptionFilePath";
+            this.fileOptionFilePath.Size = new System.Drawing.Size(135, 23);
+            this.fileOptionFilePath.TabIndex = 22;
+            this.fileOptionFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.fileOptionFilePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // label6
             // 
@@ -522,15 +535,16 @@
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
             // 
-            // fileOptionFilePath
+            // loading
             // 
-            this.fileOptionFilePath.AutoEllipsis = true;
-            this.fileOptionFilePath.Location = new System.Drawing.Point(162, 24);
-            this.fileOptionFilePath.Name = "fileOptionFilePath";
-            this.fileOptionFilePath.Size = new System.Drawing.Size(135, 23);
-            this.fileOptionFilePath.TabIndex = 22;
-            this.fileOptionFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.fileOptionFilePath.TextChanged += new System.EventHandler(this.optionsChanged);
+            this.loading.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loading.Image = ((System.Drawing.Image)(resources.GetObject("loading.Image")));
+            this.loading.Location = new System.Drawing.Point(209, 2);
+            this.loading.Name = "loading";
+            this.loading.Size = new System.Drawing.Size(34, 32);
+            this.loading.TabIndex = 21;
+            this.loading.TabStop = false;
+            this.loading.Visible = false;
             // 
             // Steganography_form
             // 
@@ -562,6 +576,7 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loading)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -606,6 +621,7 @@
         private System.Windows.Forms.TextBox encryptionPassword;
         private System.Windows.Forms.Label hostImagePath;
         private System.Windows.Forms.Label fileOptionFilePath;
+        private System.Windows.Forms.PictureBox loading;
     }
 }
 
