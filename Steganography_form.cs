@@ -84,7 +84,7 @@ namespace images_steganography
                     string ext = System.IO.Path.GetExtension(hostImagePath.Text).Substring(1);
                     saveModifiedImageAs.Filter = ext.ToUpper() + " Files|*." + ext;
                     if (saveModifiedImageAs.ShowDialog() == DialogResult.OK)
-                        modifiedImage.Save(saveModifiedImageAs.FileName);
+                        modifiedImage.Save(saveModifiedImageAs.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
 

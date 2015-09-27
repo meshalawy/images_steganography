@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="BitArrayUtils.cs" />
     <Compile Include="AES_Encryption.cs" />
+    <Compile Include="LockBitmap.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
     </Compile>

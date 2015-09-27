@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace images_steganography
@@ -45,7 +47,7 @@ namespace images_steganography
                 throw new ArgumentException("File extensions longer than 10 bytes (10 letters) are not supported.");
             else if (dataTypeBytes.Length <10)
             {
-                //padding to fill the empty files.
+                //padding to fill the empty bits.
                 byte[] temp = new byte[10];
                 dataTypeBytes.CopyTo(temp, 0);
                 dataTypeBytes = temp;
@@ -71,9 +73,16 @@ namespace images_steganography
                     ("Header should be 16 bytes length but found %s bytes. Contact the developer. Data size is: %s, Data Type is: %s",
                     headerBytes.Length, data.Length, dataType)); 
 
-            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
-            var colorsCount = colorsToUse.Count(b => b);
-            var maxBytes = (hostImage.Width * hostImage.Height * bitsPerByte * colorsCount) / 8;
+
+            //Order is important, becuause Color.ToArgb returns an integer whose sginificant bits represent Alpha, then red, then green then blue.
+            //So the while loop can use the color index to find the color bytes.
+            List<LockBitmap.ColorComponent> colorsToUse = new List<LockBitmap.ColorComponent>();
+            if (useBlue) colorsToUse.Add(LockBitmap.ColorComponent.Blue);
+            if (useGreen) colorsToUse.Add(LockBitmap.ColorComponent.Green);
+            if (useRed) colorsToUse.Add(LockBitmap.ColorComponent.Red);
+            if (useAlpha) colorsToUse.Add(LockBitmap.ColorComponent.Alpha);
+
+            var maxBytes = (hostImage.Width * hostImage.Height * bitsPerByte * colorsToUse.Count) / 8;
 
             if (maxBytes < headerBytes.Length + data.Length)
             {
@@ -88,33 +97,37 @@ namespace images_steganography
             BitArray allBits = new BitArray(headerBytes.Concat(data).ToArray());
 
             //start writing allBits accross all pixels (line by line of pixels) on the selected colors and size 
-            int index = 0;
-            Bitmap modifiedImage = new Bitmap(hostImage);
-            for (int y = 0; y < modifiedImage.Height && index < allBits.Count; y++)
+            //Bitmap modifiedImage = new Bitmap(hostImage);
+            Bitmap output = hostImage.Clone(new Rectangle(0,0,hostImage.Width, hostImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+           // LockBitmap lockBitmap = new LockBitmap(modifiedImage);
+           // lockBitmap.LockBits();
+            var width = output.Width;
+            var height = output.Height;
+            
+            //i: index, b: bit, c: color, x & y are the two dimensions.
+            int i = 0;
+           
+            for (int y = 0 ; y < height && i < allBits.Count; y++)
             {
-                for (int x = 0; x < modifiedImage.Width && index < allBits.Count; x++)
+                for (int x = 0 ; x < width && i < allBits.Count; x++)
                 {
-                    Color pixel = modifiedImage.GetPixel(x, y);
-                    Byte[] rgba = new Byte[] { pixel.R, pixel.G, pixel.B, pixel.A };
-                    for (int bit = 0; bit < bitsPerByte; bit++)
+                    for (int b = 0; b < bitsPerByte && i < allBits.Count; b++)
                     {
-                        for (int color = 0; color < rgba.Length; color++)
+                        for (int c = 0; c < colorsToUse.Count && i < allBits.Count; c++)
                         {
-                            if (colorsToUse[color] && index < allBits.Count)
-                            {
-                                rgba[color] = changeBitInByte(rgba[color], bit, allBits.Get(index));
-                                index++;
-                            }
+                            //byte old = lockBitmap.GetColorComponent(x, y, colorsToUse[c]);
+                            //byte newValue = changeSingleBit(old, b, allBits[i++]);
+                            //lockBitmap.SetColorComponent(x, y, colorsToUse[c], 0);
+                            int old = output.GetPixel(x, y).ToArgb();
+                            int newVlaue = changeSingleBit(old, (int)colorsToUse[c] * 8 + b, allBits[i++]);
+                            output.SetPixel(x, y, Color.FromArgb(newVlaue));
                         }
                     }
-                    modifiedImage.SetPixel(x, y, Color.FromArgb(
-                        System.Convert.ToInt32(rgba[3]),
-                        System.Convert.ToInt32(rgba[0]),
-                        System.Convert.ToInt32(rgba[1]),
-                        System.Convert.ToInt32(rgba[2])));
                 }
             }
-            return modifiedImage;
+          //  lockBitmap.UnlockBits();
+            System.Diagnostics.Debug.Print(output.GetPixel(0, 0).ToArgb().ToString());
+            return output;
         }
 
         public static Tuple<byte[], string> extractData(Bitmap hostImage,
@@ -122,36 +135,44 @@ namespace images_steganography
                 int bitsPerByte,
                 bool aesEncryption,
                 string encryptionPassword)
-        {   
-            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
-            var colorsCount = colorsToUse.Count(b => b);
-            var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsCount;
+        {
+            List<LockBitmap.ColorComponent> colorsToUse = new List<LockBitmap.ColorComponent>();
+            if (useBlue) colorsToUse.Add(LockBitmap.ColorComponent.Blue);
+            if (useGreen) colorsToUse.Add(LockBitmap.ColorComponent.Green);
+            if (useRed) colorsToUse.Add(LockBitmap.ColorComponent.Red);
+            if (useAlpha) colorsToUse.Add(LockBitmap.ColorComponent.Alpha);
+            var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsToUse.Count;
            
             //at least it should be bigger than header length
             if (numberOfBits /8  < HeaderLength)
                 throw new ArgumentException("Can not extract data using the selected options. Try to enlarge the bit options.");
 
             var bitsArray = new Boolean[numberOfBits];
-            var pointer = 0;
-            for (int y = 0; y < hostImage.Height; y++)
+            Bitmap modifiedImage = new Bitmap(hostImage);
+            //LockBitmap lockBitmap = new LockBitmap(modifiedImage);
+            //lockBitmap.LockBits();
+            var width = modifiedImage.Width;
+            var height = modifiedImage.Height;
+            //i: index, b: bit, c: color, x & y are the two dimensions.
+            int i = 0;
+            System.Diagnostics.Debug.Print(modifiedImage.GetPixel(0, 0).ToArgb().ToString());
+            
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < hostImage.Width; x++)
+                for (int x = 0; x < width; x++)
                 {
-                    Color pixel = hostImage.GetPixel(x, y);
-                    Byte[] rgba = new Byte[] { pixel.R, pixel.G, pixel.B, pixel.A };
-                    for (int bit = 0; bit < bitsPerByte; bit++)
+                    for (int b = 0; b < bitsPerByte; b++)
                     {
-                        for (int color = 0; color < rgba.Length; color++)
+                        for (int c = 0; c < colorsToUse.Count; c++)
                         {
-                            if (colorsToUse[color])
-                            {
-                                bitsArray[pointer++] = (getBit(rgba[color], bit));
-                            }
+                           // bitsArray[i++] = (getBit(lockBitmap.GetColorComponent(x, y, colorsToUse[c]), b));
+                            var color = modifiedImage.GetPixel(x, y).ToArgb();
+                            bitsArray[i++] = (getBit(color, (int)colorsToUse[c] * 8 + b));
                         }
                     }
                 }
             }
-            
+
             byte[] allBytes = new BitArray(bitsArray).getBytes();
 
             byte[] HeaderBytes = allBytes.Take(HeaderLength).ToArray();
@@ -177,13 +198,13 @@ namespace images_steganography
             return new Tuple<byte[], string>(dataBytes, dataType);
         }
 
-        private static byte changeBitInByte(byte originalByte, int bitIndex, bool newBitValue)
+        private static int changeSingleBit(int original, int bitIndex, bool newBitValue)
         {
             int x = System.Convert.ToInt16(newBitValue);
-            return (byte)(originalByte ^ ((-x ^ originalByte) & (1 << bitIndex)));
+            return (original ^ ((-x ^ original) & (1 << bitIndex)));
         }
 
-        private static bool getBit(byte b, int bitNumber)
+        private static bool getBit(int b, int bitNumber)
         {
             return (b & (1 << bitNumber)) != 0;
         }
