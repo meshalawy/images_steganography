@@ -117,23 +117,25 @@ namespace images_steganography
                     return;
                 }
 
-                hostImage = new Bitmap(hostImagePath.Text);
-                byte[] data = new byte[0];
-                string ext = "";
-                if (fileOption.Checked && fileOptionFilePath.Text.Length > 0)
-                {
-                    data = System.IO.File.ReadAllBytes(fileOptionFilePath.Text);
-                    ext = System.IO.Path.GetExtension(fileOptionFilePath.Text).Substring(1);
-                }
-                else
-                {
-                    data = Encoding.UTF8.GetBytes(textData.Text);
-                    ext = "txt";
-
-                }
-                modifiedImage = null;
+                
                 try
                 {
+                    hostImage = new Bitmap(hostImagePath.Text);
+                    byte[] data = new byte[0];
+                    string ext = "";
+                    if (fileOption.Checked && fileOptionFilePath.Text.Length > 0)
+                    {
+                        data = System.IO.File.ReadAllBytes(fileOptionFilePath.Text);
+                        ext = System.IO.Path.GetExtension(fileOptionFilePath.Text).Substring(1);
+                    }
+                    else
+                    {
+                        data = Encoding.UTF8.GetBytes(textData.Text);
+                        ext = "txt";
+
+                    }
+                    modifiedImage = null;
+
                     bool aesEncryption = false;
                     this.Invoke((MethodInvoker)delegate()
                     {

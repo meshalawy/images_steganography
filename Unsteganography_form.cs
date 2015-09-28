@@ -114,6 +114,7 @@ namespace images_steganography
                     var bmp = new Bitmap(fs);
                     hostImage = (Bitmap)bmp.Clone();
                 }
+                
                 extractedData = null;
                 try
                 {
@@ -123,7 +124,7 @@ namespace images_steganography
                         aesEncryption = encryptionType.SelectedIndex == 1;
                     });
 
-                    extractedData = Steganography.extractData(hostImage,
+                    extractedData = Steganography.extractData(new Bitmap(hostImagePath.Text),
                             redCheckbox.Checked,
                             greenCheckbox.Checked,
                             blueCheckbox.Checked,

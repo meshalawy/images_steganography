@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace images_steganography
@@ -69,11 +70,16 @@ namespace images_steganography
             if (headerBytes.Length != HeaderLength)
                 throw new ArgumentException(String.Format
                     ("Header should be 16 bytes length but found %s bytes. Contact the developer. Data size is: %s, Data Type is: %s",
-                    headerBytes.Length, data.Length, dataType)); 
+                    headerBytes.Length, data.Length, dataType));
 
-            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
-            var colorsCount = colorsToUse.Count(b => b);
-            var maxBytes = (hostImage.Width * hostImage.Height * bitsPerByte * colorsCount) / 8;
+            //Order is important because Alph is the most significant byte in the colors ARGB
+            List<LockBitmap.ColorComponent> colorsToUse = new List<LockBitmap.ColorComponent>();
+            if (useBlue) colorsToUse.Add(LockBitmap.ColorComponent.Blue);
+            if (useGreen) colorsToUse.Add(LockBitmap.ColorComponent.Green);
+            if (useRed) colorsToUse.Add(LockBitmap.ColorComponent.Red);
+            if (useAlpha) colorsToUse.Add(LockBitmap.ColorComponent.Alpha);
+
+            var maxBytes = (hostImage.Width * hostImage.Height * bitsPerByte * colorsToUse.Count) / 8;
 
             if (maxBytes < headerBytes.Length + data.Length)
             {
@@ -88,33 +94,55 @@ namespace images_steganography
             BitArray allBits = new BitArray(headerBytes.Concat(data).ToArray());
 
             //start writing allBits accross all pixels (line by line of pixels) on the selected colors and size 
-            int index = 0;
-            Bitmap modifiedImage = new Bitmap(hostImage);
-            for (int y = 0; y < modifiedImage.Height && index < allBits.Count; y++)
+            LockBitmap imageData = new LockBitmap(new Bitmap(hostImage));
+            imageData.LockBits();
+
+            int maxThreads = 8;
+            List<Thread> threads = new List<Thread>();
+
+            int bitsPerThread = (int) Math.Ceiling((double)allBits.Count / maxThreads);
+            for (int t = 0; t < maxThreads; t++)
             {
-                for (int x = 0; x < modifiedImage.Width && index < allBits.Count; x++)
-                {
-                    Color pixel = modifiedImage.GetPixel(x, y);
-                    Byte[] rgba = new Byte[] { pixel.R, pixel.G, pixel.B, pixel.A };
-                    for (int bit = 0; bit < bitsPerByte; bit++)
+                int start = t * bitsPerThread;
+                Thread thread = new Thread(( startIndex )=>{
+                    int b, c, y, x, r;
+                    int pixelCount = imageData.Width * imageData.Height;
+                    int bytesToUse = pixelCount * colorsToUse.Count;
+                    int end = (int)startIndex + bitsPerThread;
+            
+                    for (int i = (int) startIndex; i < end; i++)
                     {
-                        for (int color = 0; color < rgba.Length; color++)
-                        {
-                            if (colorsToUse[color] && index < allBits.Count)
-                            {
-                                rgba[color] = changeBitInByte(rgba[color], bit, allBits.Get(index));
-                                index++;
-                            }
-                        }
+                        setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse, out x, out y, out c, out b);
+                        byte oldValue = imageData.GetColorComponent(x, y, colorsToUse[c]);
+                        byte newValue = changeBitInByte(oldValue, b, allBits[i]);
+                        imageData.SetColorComponent(x, y, colorsToUse[c], newValue);
                     }
-                    modifiedImage.SetPixel(x, y, Color.FromArgb(
-                        System.Convert.ToInt32(rgba[3]),
-                        System.Convert.ToInt32(rgba[0]),
-                        System.Convert.ToInt32(rgba[1]),
-                        System.Convert.ToInt32(rgba[2])));
-                }
+                });
+                thread.Start(start);
+                threads.Add(thread);
             }
-            return modifiedImage;
+            foreach (Thread t in threads)
+                t.Join();
+
+            imageData.UnlockBits();
+            return imageData.getImage() ;
+        }
+
+        private static void setCorrespondingXYCBInImageForDataBit(int bitIndex, LockBitmap image, List<LockBitmap.ColorComponent> colorsToUse, 
+            out int x, out int y, out int c, out int b)
+        {
+            int r;
+            int pixelCount = image.Width * image.Height;
+            int bytesToUse = pixelCount * colorsToUse.Count;
+
+            b = bitIndex / bytesToUse;
+            r = bitIndex % bytesToUse;
+
+            c = r / pixelCount;
+            r = r % pixelCount;
+
+            y = r / image.Width;
+            x = r % image.Width;
         }
 
         public static Tuple<byte[], string> extractData(Bitmap hostImage,
@@ -122,56 +150,63 @@ namespace images_steganography
                 int bitsPerByte,
                 bool aesEncryption,
                 string encryptionPassword)
-        {   
-            bool[] colorsToUse = new bool[] { useRed, useBlue, useGreen, useAlpha };
-            var colorsCount = colorsToUse.Count(b => b);
-            var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsCount;
+        {
+
+            List<LockBitmap.ColorComponent> colorsToUse = new List<LockBitmap.ColorComponent>();
+            if (useBlue) colorsToUse.Add(LockBitmap.ColorComponent.Blue);
+            if (useGreen) colorsToUse.Add(LockBitmap.ColorComponent.Green);
+            if (useRed) colorsToUse.Add(LockBitmap.ColorComponent.Red);
+            if (useAlpha) colorsToUse.Add(LockBitmap.ColorComponent.Alpha);
+            var numberOfBits = hostImage.Width * hostImage.Height * bitsPerByte * colorsToUse.Count;
            
             //at least it should be bigger than header length
             if (numberOfBits /8  < HeaderLength)
                 throw new ArgumentException("Can not extract data using the selected options. Try to enlarge the bit options.");
 
-            var bitsArray = new Boolean[numberOfBits];
-            var pointer = 0;
-            for (int y = 0; y < hostImage.Height; y++)
-            {
-                for (int x = 0; x < hostImage.Width; x++)
-                {
-                    Color pixel = hostImage.GetPixel(x, y);
-                    Byte[] rgba = new Byte[] { pixel.R, pixel.G, pixel.B, pixel.A };
-                    for (int bit = 0; bit < bitsPerByte; bit++)
-                    {
-                        for (int color = 0; color < rgba.Length; color++)
-                        {
-                            if (colorsToUse[color])
-                            {
-                                bitsArray[pointer++] = (getBit(rgba[color], bit));
-                            }
-                        }
-                    }
-                }
-            }
+
             
-            byte[] allBytes = new BitArray(bitsArray).getBytes();
+            LockBitmap imageData = new LockBitmap(hostImage);
+            imageData.LockBits();
+            
+            //Extract data: start by extracting header data:
+            var headerLengthInBits = HeaderLength * 8;
+            var headerBits = new Boolean[headerLengthInBits];
+            int i, x, y, c, b;
+            for (i = 0; i < headerLengthInBits; i++)
+            { 
+                setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse, out x, out y, out c, out b);
+                headerBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
+            }
 
-            byte[] HeaderBytes = allBytes.Take(HeaderLength).ToArray();
+            byte[] headerBytes = new BitArray(headerBits).getBytes();
             if (aesEncryption)
-                HeaderBytes = AES_Encryption.AES_Decrypt(HeaderBytes, encryptionPassword);
+                headerBytes = AES_Encryption.AES_Decrypt(headerBytes, encryptionPassword);
 
-            var dataSize = BitConverter.ToInt32(HeaderBytes, 0);
-            string dataType = Encoding.ASCII.GetString(HeaderBytes.Skip(4).Take(10).ToArray()).TrimEnd('\0');
+            var dataSize = BitConverter.ToInt32(headerBytes, 0);
+            string dataType = Encoding.ASCII.GetString(headerBytes.Skip(4).Take(10).ToArray()).TrimEnd('\0');
 
-            //The ramaining bytes should fit the data size;
-            if (dataSize<0 ||
-                (allBytes.Length - HeaderBytes.Length)< dataSize )
+            //check wrong data size and also check illegal characters in data type (extension) because wrong options can generate unexpected data in data type field.;
+            if (dataSize < 0 ||
+                dataType.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
                 throw new ArgumentException("Can not extract data using the selected options. Try to change colors and bit options.");
 
-            //check illegal characters in data type (extension) because wrong options can generate unexpected data in data type field.
-            if (dataType.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
-                throw new ArgumentException("Found illegale and wrong data type!. Typically this occures due to the wrong options.");
+            //read data bytes based on the dataSize found in header
+            int dataSizeInBits = dataSize * 8;
+            var dataBits = new Boolean[dataSizeInBits];
+            for (i = 0; i < dataSizeInBits; i++)
+            {
+                setCorrespondingXYCBInImageForDataBit(i + headerLengthInBits, imageData, colorsToUse, out x, out y, out c, out b);
+                headerBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
+            }
 
-            byte[] dataBytes = allBytes.Skip(16).Take(dataSize).ToArray();
-            if(aesEncryption)
+            //Make sure to find all bits;
+            if (i < dataSizeInBits)
+                throw new ArgumentException("Can not extract data using the selected options. Try to change colors and bit options.");
+
+
+
+            byte[] dataBytes = new BitArray(dataBits).getBytes();
+            if (aesEncryption)
                 dataBytes = AES_Encryption.AES_Decrypt(dataBytes, encryptionPassword);
 
             return new Tuple<byte[], string>(dataBytes, dataType);
