@@ -109,15 +109,17 @@ namespace images_steganography
                     return;
                 }
 
-                using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open, FileAccess.Read))
-                {
-                    var bmp = new Bitmap(fs);
-                    hostImage = (Bitmap)bmp.Clone();
-                }
                 
-                extractedData = null;
                 try
                 {
+                    using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open, FileAccess.Read))
+                    {
+                        var bmp = new Bitmap(fs);
+                        hostImage = (Bitmap)bmp.Clone();
+                    }
+
+                    extractedData = null;
+
                     bool aesEncryption = false;
                     this.Invoke((MethodInvoker)delegate()
                     {

@@ -110,7 +110,7 @@ namespace images_steganography
                     int bytesToUse = pixelCount * colorsToUse.Count;
                     int end = (int)startIndex + bitsPerThread;
             
-                    for (int i = (int) startIndex; i < end; i++)
+                    for (int i = (int) startIndex; i < end && i<allBits.Count; i++)
                     {
                         setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse, out x, out y, out c, out b);
                         byte oldValue = imageData.GetColorComponent(x, y, colorsToUse[c]);
@@ -187,23 +187,36 @@ namespace images_steganography
 
             //check wrong data size and also check illegal characters in data type (extension) because wrong options can generate unexpected data in data type field.;
             if (dataSize < 0 ||
-                dataType.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
+                dataType.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0 || 
+                (numberOfBits-headerLengthInBits)/8 < dataSize)
                 throw new ArgumentException("Can not extract data using the selected options. Try to change colors and bit options.");
 
             //read data bytes based on the dataSize found in header
             int dataSizeInBits = dataSize * 8;
             var dataBits = new Boolean[dataSizeInBits];
-            for (i = 0; i < dataSizeInBits; i++)
+            int maxThreads = 8;
+            List<Thread> threads = new List<Thread>();
+
+            int bitsPerThread = (int) Math.Ceiling((double)dataSizeInBits / maxThreads);
+            for (int t = 0; t < maxThreads; t++)
             {
-                setCorrespondingXYCBInImageForDataBit(i + headerLengthInBits, imageData, colorsToUse, out x, out y, out c, out b);
-                dataBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
+                int start = t * bitsPerThread;
+                Thread thread = new Thread(( startIndex )=>{
+                    int end = (int)startIndex + bitsPerThread;
+                    //double letters to differntiate from already defiend variables previously.
+                    //without different name, all threads will be using the same variables with unsafe read/write for those variables.
+                    int ii, xx, yy, cc, bb;
+                    for (ii = (int) startIndex; ii < end && ii < dataSizeInBits; ii++)
+                    {
+                        setCorrespondingXYCBInImageForDataBit(ii + headerLengthInBits, imageData, colorsToUse, out xx, out yy, out cc, out bb);
+                        dataBits[ii] = getBit(imageData.GetColorComponent(xx, yy, colorsToUse[cc]), bb);
+                    }
+                });
+                thread.Start(start);
+                threads.Add(thread);
             }
-
-            //Make sure to find all bits;
-            if (i < dataSizeInBits)
-                throw new ArgumentException("Can not extract data using the selected options. Try to change colors and bit options.");
-
-
+            foreach (Thread t in threads)
+                t.Join();
 
             byte[] dataBytes = new BitArray(dataBits).getBytes();
             if (aesEncryption)
