@@ -105,7 +105,7 @@ namespace images_steganography
             {
                 int start = t * bitsPerThread;
                 Thread thread = new Thread(( startIndex )=>{
-                    int b, c, y, x, r;
+                    int b, c, y, x;
                     int pixelCount = imageData.Width * imageData.Height;
                     int bytesToUse = pixelCount * colorsToUse.Count;
                     int end = (int)startIndex + bitsPerThread;
