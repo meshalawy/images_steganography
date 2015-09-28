@@ -36,6 +36,7 @@
             this.loading = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
             this.hostImagePreview = new System.Windows.Forms.PictureBox();
             this.extractedImagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -64,7 +65,6 @@
             this.selectHostImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveExtractedDataAs = new System.Windows.Forms.SaveFileDialog();
             this.warningBox1 = new DevComponents.DotNetBar.Controls.WarningBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -166,6 +166,16 @@
             this.panel4.Size = new System.Drawing.Size(422, 34);
             this.panel4.TabIndex = 23;
             // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(332, 13);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "الصورة المُضيفة:";
+            // 
             // hostImagePreview
             // 
             this.hostImagePreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -262,9 +272,11 @@
             this.hostImagePath.AutoEllipsis = true;
             this.hostImagePath.Location = new System.Drawing.Point(462, 24);
             this.hostImagePath.Name = "hostImagePath";
+            this.hostImagePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.hostImagePath.Size = new System.Drawing.Size(226, 23);
             this.hostImagePath.TabIndex = 40;
-            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // encryptionPassword
             // 
@@ -521,16 +533,6 @@
             this.warningBox1.TabStop = false;
             this.warningBox1.Text = "<b>Warning Box</b> control with <i>text-markup</i> support.";
             this.warningBox1.Visible = false;
-            // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(332, 13);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(79, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "الصورة المُضيفة:";
             // 
             // Unsteganography_form
             // 

@@ -292,9 +292,10 @@
             this.hostImagePath.AutoEllipsis = true;
             this.hostImagePath.Location = new System.Drawing.Point(462, 24);
             this.hostImagePath.Name = "hostImagePath";
-            this.hostImagePath.Size = new System.Drawing.Size(226, 23);
+            this.hostImagePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.hostImagePath.Size = new System.Drawing.Size(226, 19);
             this.hostImagePath.TabIndex = 21;
-            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // encryptionPassword
@@ -341,9 +342,10 @@
             this.fileOptionFilePath.AutoEllipsis = true;
             this.fileOptionFilePath.Location = new System.Drawing.Point(6, 33);
             this.fileOptionFilePath.Name = "fileOptionFilePath";
+            this.fileOptionFilePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.fileOptionFilePath.Size = new System.Drawing.Size(239, 23);
             this.fileOptionFilePath.TabIndex = 22;
-            this.fileOptionFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.fileOptionFilePath.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.fileOptionFilePath.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // label6
