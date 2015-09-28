@@ -196,7 +196,7 @@ namespace images_steganography
             for (i = 0; i < dataSizeInBits; i++)
             {
                 setCorrespondingXYCBInImageForDataBit(i + headerLengthInBits, imageData, colorsToUse, out x, out y, out c, out b);
-                headerBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
+                dataBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
             }
 
             //Make sure to find all bits;
