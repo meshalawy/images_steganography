@@ -115,6 +115,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(950, 650);
             this.Name = "mainForm";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
             this.Text = "Steganography";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);

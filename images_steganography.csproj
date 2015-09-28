@@ -45,10 +45,6 @@
     <Reference Include="DevComponents.DotNetBar2, Version=10.0.0.3, Culture=neutral, PublicKeyToken=c39c3242a43eee2b, processorArchitecture=MSIL">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="FileIcon">
-      <HintPath>..\..\FileIcon\FileIcon\bin\Debug\FileIcon.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +59,8 @@
   <ItemGroup>
     <Compile Include="BitArrayUtils.cs" />
     <Compile Include="AES_Encryption.cs" />
+    <Compile Include="FileIcons\IconHelper.cs" />
+    <Compile Include="FileIcons\IconListManager.cs" />
     <Compile Include="LockBitmap.cs" />
     <Compile Include="mainForm.cs">
       <SubType>Form</SubType>
