@@ -34,7 +34,8 @@ namespace images_steganography
                 bool useRed, bool useGreen, bool useBlue, bool useAlpha,
                 int bitsPerByte,
                 bool aesEncryption, 
-                string encryptionPassword)
+                string encryptionPassword,
+                int numOfThreads)
         {
 
             if (aesEncryption)
@@ -97,11 +98,10 @@ namespace images_steganography
             LockBitmap imageData = new LockBitmap(new Bitmap(hostImage));
             imageData.LockBits();
 
-            int maxThreads = 8;
             List<Thread> threads = new List<Thread>();
 
-            int bitsPerThread = (int) Math.Ceiling((double)allBits.Count / maxThreads);
-            for (int t = 0; t < maxThreads; t++)
+            int bitsPerThread = (int) Math.Ceiling((double)allBits.Count / numOfThreads);
+            for (int t = 0; t < numOfThreads; t++)
             {
                 int start = t * bitsPerThread;
                 Thread thread = new Thread(( startIndex )=>{
@@ -149,7 +149,8 @@ namespace images_steganography
                 bool useRed, bool useGreen, bool useBlue, bool useAlpha,
                 int bitsPerByte,
                 bool aesEncryption,
-                string encryptionPassword)
+                string encryptionPassword,
+                int numOfThreads)
         {
 
             List<LockBitmap.ColorComponent> colorsToUse = new List<LockBitmap.ColorComponent>();
@@ -194,11 +195,10 @@ namespace images_steganography
             //read data bytes based on the dataSize found in header
             int dataSizeInBits = dataSize * 8;
             var dataBits = new Boolean[dataSizeInBits];
-            int maxThreads = 8;
-            List<Thread> threads = new List<Thread>();
 
-            int bitsPerThread = (int) Math.Ceiling((double)dataSizeInBits / maxThreads);
-            for (int t = 0; t < maxThreads; t++)
+            List<Thread> threads = new List<Thread>();
+            int bitsPerThread = (int)Math.Ceiling((double)dataSizeInBits / numOfThreads);
+            for (int t = 0; t < numOfThreads; t++)
             {
                 int start = t * bitsPerThread;
                 Thread thread = new Thread(( startIndex )=>{

@@ -41,6 +41,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.hostImagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.threadsCountLabel = new System.Windows.Forms.Label();
+            this.threadsSlider = new System.Windows.Forms.TrackBar();
+            this.label9 = new System.Windows.Forms.Label();
             this.hostImagePath = new System.Windows.Forms.Label();
             this.encryptionPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -76,6 +79,7 @@
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hostImagePreview)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.threadsSlider)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).BeginInit();
             this.SuspendLayout();
@@ -87,9 +91,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 242);
+            this.groupBox1.Location = new System.Drawing.Point(12, 257);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(878, 346);
+            this.groupBox1.Size = new System.Drawing.Size(878, 331);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "المعاينة";
@@ -113,7 +117,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(857, 320);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(857, 305);
             this.tableLayoutPanel1.TabIndex = 13;
             // 
             // modifiedImagePreview
@@ -123,7 +127,7 @@
             this.modifiedImagePreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.modifiedImagePreview.Location = new System.Drawing.Point(3, 43);
             this.modifiedImagePreview.Name = "modifiedImagePreview";
-            this.modifiedImagePreview.Size = new System.Drawing.Size(423, 274);
+            this.modifiedImagePreview.Size = new System.Drawing.Size(423, 259);
             this.modifiedImagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.modifiedImagePreview.TabIndex = 2;
             this.modifiedImagePreview.TabStop = false;
@@ -213,7 +217,7 @@
             this.hostImagePreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hostImagePreview.Location = new System.Drawing.Point(432, 43);
             this.hostImagePreview.Name = "hostImagePreview";
-            this.hostImagePreview.Size = new System.Drawing.Size(422, 274);
+            this.hostImagePreview.Size = new System.Drawing.Size(422, 259);
             this.hostImagePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.hostImagePreview.TabIndex = 0;
             this.hostImagePreview.TabStop = false;
@@ -223,6 +227,9 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.Controls.Add(this.threadsCountLabel);
+            this.groupBox2.Controls.Add(this.threadsSlider);
+            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.encryptionPassword);
             this.groupBox2.Controls.Add(this.label8);
@@ -241,10 +248,43 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.groupBox2.Size = new System.Drawing.Size(878, 224);
+            this.groupBox2.Size = new System.Drawing.Size(878, 239);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "خيارات";
+            // 
+            // threadsCountLabel
+            // 
+            this.threadsCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.threadsCountLabel.AutoSize = true;
+            this.threadsCountLabel.Location = new System.Drawing.Point(720, 198);
+            this.threadsCountLabel.Name = "threadsCountLabel";
+            this.threadsCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.threadsCountLabel.TabIndex = 24;
+            this.threadsCountLabel.Text = "8";
+            // 
+            // threadsSlider
+            // 
+            this.threadsSlider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.threadsSlider.BackColor = System.Drawing.Color.White;
+            this.threadsSlider.Location = new System.Drawing.Point(553, 190);
+            this.threadsSlider.Maximum = 16;
+            this.threadsSlider.Minimum = 1;
+            this.threadsSlider.Name = "threadsSlider";
+            this.threadsSlider.Size = new System.Drawing.Size(160, 45);
+            this.threadsSlider.TabIndex = 23;
+            this.threadsSlider.Value = 8;
+            this.threadsSlider.Scroll += new System.EventHandler(this.threadsSlider_Scroll);
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(737, 198);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(121, 13);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "عدد المسارات (Threads) :";
             // 
             // hostImagePath
             // 
@@ -562,7 +602,7 @@
             // 
             // warningBox1
             // 
-            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(223)))), ((int)(((byte)(245)))));
+            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(219)))), ((int)(((byte)(249)))));
             this.warningBox1.CloseButtonVisible = false;
             this.warningBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.warningBox1.Image = ((System.Drawing.Image)(resources.GetObject("warningBox1.Image")));
@@ -606,6 +646,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.hostImagePreview)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.threadsSlider)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).EndInit();
@@ -654,6 +695,9 @@
         private System.Windows.Forms.Label hostImagePath;
         private System.Windows.Forms.Label fileOptionFilePath;
         private System.Windows.Forms.PictureBox loading;
+        private System.Windows.Forms.TrackBar threadsSlider;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label threadsCountLabel;
     }
 }
 

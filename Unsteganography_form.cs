@@ -133,7 +133,8 @@ namespace images_steganography
                             alphaCheckbox.Checked,
                             (int)NumberOfBitsInput.Value,
                             aesEncryption,
-                            encryptionPassword.Text);
+                            encryptionPassword.Text,
+                            8);
                 }
                 catch (Exception ex)
                 {

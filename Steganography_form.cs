@@ -24,6 +24,11 @@ namespace images_steganography
                 this.encryptionType.SelectedIndexChanged += new EventHandler(encryptionType_changed);
             }
 
+            private void threadsSlider_Scroll(object sender, EventArgs e)
+            {
+                threadsCountLabel.Text = threadsSlider.Value.ToString();
+            }
+
             private void textOption_CheckedChanged(object sender, EventArgs e)
             {
                 textData.Enabled = textOption.Checked;
@@ -142,6 +147,12 @@ namespace images_steganography
                         aesEncryption = encryptionType.SelectedIndex == 1;
                     });
 
+                    int threadCount = 1;
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        threadCount = threadsSlider.Value;
+                    });
+
                     modifiedImage = Steganography.hideData(hostImage,
                         data,
                         ext,
@@ -151,7 +162,8 @@ namespace images_steganography
                         alphaCheckbox.Checked,
                         (int)NumberOfBitsInput.Value,
                         aesEncryption,
-                        encryptionPassword.Text);
+                        encryptionPassword.Text,
+                        threadCount);
                 }
                 catch (Exception ex)
                 {
