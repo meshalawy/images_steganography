@@ -147,7 +147,7 @@
             // loading
             // 
             this.loading.Image = ((System.Drawing.Image)(resources.GetObject("loading.Image")));
-            this.loading.Location = new System.Drawing.Point(179, 1);
+            this.loading.Location = new System.Drawing.Point(0, 0);
             this.loading.Name = "loading";
             this.loading.Size = new System.Drawing.Size(34, 33);
             this.loading.TabIndex = 21;
@@ -158,7 +158,7 @@
             // 
             this.saveAsButton.Image = ((System.Drawing.Image)(resources.GetObject("saveAsButton.Image")));
             this.saveAsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.saveAsButton.Location = new System.Drawing.Point(96, 8);
+            this.saveAsButton.Location = new System.Drawing.Point(128, 6);
             this.saveAsButton.Name = "saveAsButton";
             this.saveAsButton.Size = new System.Drawing.Size(77, 23);
             this.saveAsButton.TabIndex = 2;
@@ -171,7 +171,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(329, 13);
+            this.label5.Location = new System.Drawing.Point(337, 13);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 13);
             this.label5.TabIndex = 1;
@@ -181,7 +181,7 @@
             // 
             this.showOriginalImage.Image = ((System.Drawing.Image)(resources.GetObject("showOriginalImage.Image")));
             this.showOriginalImage.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.showOriginalImage.Location = new System.Drawing.Point(6, 8);
+            this.showOriginalImage.Location = new System.Drawing.Point(38, 6);
             this.showOriginalImage.Name = "showOriginalImage";
             this.showOriginalImage.Size = new System.Drawing.Size(84, 23);
             this.showOriginalImage.TabIndex = 3;
@@ -248,7 +248,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.groupBox2.Size = new System.Drawing.Size(878, 239);
+            this.groupBox2.Size = new System.Drawing.Size(878, 240);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "خيارات";
@@ -272,7 +272,7 @@
             this.threadsSlider.Minimum = 1;
             this.threadsSlider.Name = "threadsSlider";
             this.threadsSlider.Size = new System.Drawing.Size(160, 45);
-            this.threadsSlider.TabIndex = 23;
+            this.threadsSlider.TabIndex = 14;
             this.threadsSlider.Value = 8;
             this.threadsSlider.Scroll += new System.EventHandler(this.threadsSlider_Scroll);
             // 
@@ -283,7 +283,7 @@
             this.label9.Location = new System.Drawing.Point(737, 198);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(121, 13);
-            this.label9.TabIndex = 22;
+            this.label9.TabIndex = 13;
             this.label9.Text = "عدد المسارات (Threads) :";
             // 
             // hostImagePath
@@ -332,7 +332,7 @@
             this.panel2.Location = new System.Drawing.Point(18, 15);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(401, 194);
-            this.panel2.TabIndex = 13;
+            this.panel2.TabIndex = 15;
             // 
             // fileOptionFilePath
             // 
@@ -353,7 +353,7 @@
             this.label6.Location = new System.Drawing.Point(271, 9);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(122, 13);
-            this.label6.TabIndex = 14;
+            this.label6.TabIndex = 16;
             this.label6.Text = "البيانات المطلوب إخفاءها:";
             // 
             // importTextFromFileButton
@@ -364,7 +364,7 @@
             this.importTextFromFileButton.Location = new System.Drawing.Point(194, 56);
             this.importTextFromFileButton.Name = "importTextFromFileButton";
             this.importTextFromFileButton.Size = new System.Drawing.Size(126, 23);
-            this.importTextFromFileButton.TabIndex = 18;
+            this.importTextFromFileButton.TabIndex = 20;
             this.importTextFromFileButton.Text = "استيراد من ملف نَصَي";
             this.importTextFromFileButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.importTextFromFileButton.UseVisualStyleBackColor = true;
@@ -381,7 +381,7 @@
             this.textData.Name = "textData";
             this.textData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textData.Size = new System.Drawing.Size(383, 99);
-            this.textData.TabIndex = 19;
+            this.textData.TabIndex = 21;
             this.textData.TextChanged += new System.EventHandler(this.optionsChanged);
             // 
             // fileOption
@@ -391,7 +391,7 @@
             this.fileOption.Location = new System.Drawing.Point(344, 33);
             this.fileOption.Name = "fileOption";
             this.fileOption.Size = new System.Drawing.Size(45, 17);
-            this.fileOption.TabIndex = 15;
+            this.fileOption.TabIndex = 17;
             this.fileOption.TabStop = true;
             this.fileOption.Text = "ملف:";
             this.fileOption.UseVisualStyleBackColor = true;
@@ -405,7 +405,7 @@
             this.selectFileForFileOption.Location = new System.Drawing.Point(245, 30);
             this.selectFileForFileOption.Name = "selectFileForFileOption";
             this.selectFileForFileOption.Size = new System.Drawing.Size(75, 23);
-            this.selectFileForFileOption.TabIndex = 16;
+            this.selectFileForFileOption.TabIndex = 18;
             this.selectFileForFileOption.Text = "استعراض";
             this.selectFileForFileOption.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.selectFileForFileOption.UseVisualStyleBackColor = true;
@@ -419,7 +419,7 @@
             this.textOption.Location = new System.Drawing.Point(346, 59);
             this.textOption.Name = "textOption";
             this.textOption.Size = new System.Drawing.Size(43, 17);
-            this.textOption.TabIndex = 17;
+            this.textOption.TabIndex = 19;
             this.textOption.TabStop = true;
             this.textOption.Text = "نَص:";
             this.textOption.UseVisualStyleBackColor = true;

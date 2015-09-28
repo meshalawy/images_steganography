@@ -25,13 +25,17 @@ namespace images_steganography
                 this.encryptionType.SelectedIndexChanged += new EventHandler(encryptionType_changed);
             }
 
+            private void threadsSlider_Scroll(object sender, EventArgs e)
+            {
+
+            }
+
             private void selectHostImageButton_Click(object sender, EventArgs e)
             {
                 if (selectHostImageDialog.ShowDialog() == DialogResult.OK)
                     hostImagePath.Text = selectHostImageDialog.FileName;
             }
-
-
+    
             private void updatePreviews()
             {
                 hostImagePreview.Image = hostImage;
@@ -108,8 +112,6 @@ namespace images_steganography
                     extractedData = null;
                     return;
                 }
-
-                
                 try
                 {
                     using (var fs = new System.IO.FileStream(hostImagePath.Text, System.IO.FileMode.Open, FileAccess.Read))
@@ -125,7 +127,11 @@ namespace images_steganography
                     {
                         aesEncryption = encryptionType.SelectedIndex == 1;
                     });
-
+                    int threadCount = 1;
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        threadCount = threadsSlider.Value;
+                    });
                     extractedData = Steganography.extractData(new Bitmap(hostImagePath.Text),
                             redCheckbox.Checked,
                             greenCheckbox.Checked,
@@ -134,7 +140,7 @@ namespace images_steganography
                             (int)NumberOfBitsInput.Value,
                             aesEncryption,
                             encryptionPassword.Text,
-                            8);
+                            threadCount);
                 }
                 catch (Exception ex)
                 {
@@ -168,6 +174,8 @@ namespace images_steganography
                     System.Diagnostics.Process.Start(path);
                 }
             }
-        #endregion     
+        #endregion
+
+
     }
 }
