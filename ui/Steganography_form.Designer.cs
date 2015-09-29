@@ -293,7 +293,7 @@
             this.hostImagePath.Location = new System.Drawing.Point(462, 24);
             this.hostImagePath.Name = "hostImagePath";
             this.hostImagePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.hostImagePath.Size = new System.Drawing.Size(226, 19);
+            this.hostImagePath.Size = new System.Drawing.Size(226, 23);
             this.hostImagePath.TabIndex = 21;
             this.hostImagePath.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.hostImagePath.TextChanged += new System.EventHandler(this.optionsChanged);
@@ -604,7 +604,7 @@
             // 
             // warningBox1
             // 
-            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(219)))), ((int)(((byte)(249)))));
+            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(223)))), ((int)(((byte)(245)))));
             this.warningBox1.CloseButtonVisible = false;
             this.warningBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.warningBox1.Image = ((System.Drawing.Image)(resources.GetObject("warningBox1.Image")));
