@@ -47,7 +47,7 @@ namespace images_steganography
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            if (selectLogoDialog.ShowDialog() == DialogResult.OK || true)
+            if (selectLogoDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
