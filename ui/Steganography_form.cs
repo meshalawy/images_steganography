@@ -81,10 +81,10 @@ namespace images_steganography
                     MessageBox.Show("There is no image to save. Please use options panel to generate the steganographied image.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
                 {
-                    string ext = System.IO.Path.GetExtension(hostImagePath.Text).Substring(1);
+                    string ext = "png";
                     saveModifiedImageAs.Filter = ext.ToUpper() + " Files|*." + ext;
                     if (saveModifiedImageAs.ShowDialog() == DialogResult.OK)
-                        modifiedImage.Save(saveModifiedImageAs.FileName);
+                        modifiedImage.Save(saveModifiedImageAs.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
 
