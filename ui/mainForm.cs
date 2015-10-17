@@ -28,7 +28,7 @@ namespace images_steganography
                 Bitmap logo = new Bitmap(LOGO_FILE_NAME);
                 logoPictureBox.Image = logo;
             }
-            catch (Exception ex) { }//do nothing
+            catch (Exception) { }//do nothing
 
             openForm(Program.steganography_form);
             openForm(Program.unsteganography_form);
@@ -55,7 +55,7 @@ namespace images_steganography
                     logoPictureBox.Image = newImage;
                     newImage.Save(LOGO_FILE_NAME);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show(this, "تعذر تحميل الصورة من الملف المحدد ، قد لا يمثل الملف المحدد صورة صالحة أو قد يكون الملف معطوباً", "صورة غير صالحة", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }       
