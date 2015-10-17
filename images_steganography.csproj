@@ -49,7 +49,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FileIcon">
-      <HintPath>..\..\FileIcon\FileIcon\bin\Debug\FileIcon.dll</HintPath>
+      <HintPath>Z:\Dropbox\workshop\C# Workshop\images_steganography\images_steganography\lib\FileIcon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
