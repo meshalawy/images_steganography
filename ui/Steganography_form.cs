@@ -24,11 +24,6 @@ namespace images_steganography
                 this.encryptionType.SelectedIndexChanged += new EventHandler(encryptionType_changed);
             }
 
-            private void threadsSlider_Scroll(object sender, EventArgs e)
-            {
-                threadsCountLabel.Text = threadsSlider.Value.ToString();
-            }
-
             private void textOption_CheckedChanged(object sender, EventArgs e)
             {
                 textData.Enabled = textOption.Checked;
@@ -147,11 +142,7 @@ namespace images_steganography
                         aesEncryption = encryptionType.SelectedIndex == 1;
                     });
 
-                    int threadCount = 1;
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        threadCount = threadsSlider.Value;
-                    });
+                    int threadCount = 8;
 
                     modifiedImage = Steganography.hideData(hostImage,
                         data,

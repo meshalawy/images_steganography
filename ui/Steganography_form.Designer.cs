@@ -41,9 +41,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.hostImagePreview = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.threadsCountLabel = new System.Windows.Forms.Label();
-            this.threadsSlider = new System.Windows.Forms.TrackBar();
-            this.label9 = new System.Windows.Forms.Label();
             this.hostImagePath = new System.Windows.Forms.Label();
             this.encryptionPassword = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -79,7 +76,6 @@
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hostImagePreview)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.threadsSlider)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).BeginInit();
             this.SuspendLayout();
@@ -227,9 +223,6 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox2.Controls.Add(this.threadsCountLabel);
-            this.groupBox2.Controls.Add(this.threadsSlider);
-            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.hostImagePath);
             this.groupBox2.Controls.Add(this.encryptionPassword);
             this.groupBox2.Controls.Add(this.label8);
@@ -252,39 +245,6 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "خيارات";
-            // 
-            // threadsCountLabel
-            // 
-            this.threadsCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.threadsCountLabel.AutoSize = true;
-            this.threadsCountLabel.Location = new System.Drawing.Point(720, 198);
-            this.threadsCountLabel.Name = "threadsCountLabel";
-            this.threadsCountLabel.Size = new System.Drawing.Size(13, 13);
-            this.threadsCountLabel.TabIndex = 24;
-            this.threadsCountLabel.Text = "8";
-            // 
-            // threadsSlider
-            // 
-            this.threadsSlider.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.threadsSlider.BackColor = System.Drawing.Color.White;
-            this.threadsSlider.Location = new System.Drawing.Point(553, 190);
-            this.threadsSlider.Maximum = 16;
-            this.threadsSlider.Minimum = 1;
-            this.threadsSlider.Name = "threadsSlider";
-            this.threadsSlider.Size = new System.Drawing.Size(160, 45);
-            this.threadsSlider.TabIndex = 14;
-            this.threadsSlider.Value = 8;
-            this.threadsSlider.Scroll += new System.EventHandler(this.threadsSlider_Scroll);
-            // 
-            // label9
-            // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(737, 198);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(121, 13);
-            this.label9.TabIndex = 13;
-            this.label9.Text = "عدد المسارات (Threads) :";
             // 
             // hostImagePath
             // 
@@ -604,7 +564,7 @@
             // 
             // warningBox1
             // 
-            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(223)))), ((int)(((byte)(245)))));
+            this.warningBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(196)))), ((int)(((byte)(219)))), ((int)(((byte)(249)))));
             this.warningBox1.CloseButtonVisible = false;
             this.warningBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.warningBox1.Image = ((System.Drawing.Image)(resources.GetObject("warningBox1.Image")));
@@ -648,7 +608,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.hostImagePreview)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.threadsSlider)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumberOfBitsInput)).EndInit();
@@ -697,9 +656,6 @@
         private System.Windows.Forms.Label hostImagePath;
         private System.Windows.Forms.Label fileOptionFilePath;
         private System.Windows.Forms.PictureBox loading;
-        private System.Windows.Forms.TrackBar threadsSlider;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label threadsCountLabel;
     }
 }
 

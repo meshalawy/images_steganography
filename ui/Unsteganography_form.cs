@@ -25,11 +25,6 @@ namespace images_steganography
                 this.encryptionType.SelectedIndexChanged += new EventHandler(encryptionType_changed);
             }
 
-            private void threadsSlider_Scroll(object sender, EventArgs e)
-            {
-
-            }
-
             private void selectHostImageButton_Click(object sender, EventArgs e)
             {
                 if (selectHostImageDialog.ShowDialog() == DialogResult.OK)
@@ -127,11 +122,8 @@ namespace images_steganography
                     {
                         aesEncryption = encryptionType.SelectedIndex == 1;
                     });
-                    int threadCount = 1;
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        threadCount = threadsSlider.Value;
-                    });
+                    int threadCount = 8;
+
                     extractedData = Steganography.extractData(new Bitmap(hostImagePath.Text),
                             redCheckbox.Checked,
                             greenCheckbox.Checked,
