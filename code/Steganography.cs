@@ -106,13 +106,11 @@ namespace images_steganography
                 int start = t * bitsPerThread;
                 Thread thread = new Thread(( startIndex )=>{
                     int b, c, y, x;
-                    int pixelCount = imageData.Width * imageData.Height;
-                    int bytesToUse = pixelCount * colorsToUse.Count;
                     int end = (int)startIndex + bitsPerThread;
             
                     for (int i = (int) startIndex; i < end && i<allBits.Count; i++)
                     {
-                        setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse, out x, out y, out c, out b);
+                        setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse.Count, bitsPerByte, out x, out y, out c, out b);
                         byte oldValue = imageData.GetColorComponent(x, y, colorsToUse[c]);
                         byte newValue = changeBitInByte(oldValue, b, allBits[i]);
                         imageData.SetColorComponent(x, y, colorsToUse[c], newValue);
@@ -128,21 +126,18 @@ namespace images_steganography
             return imageData.getImage() ;
         }
 
-        private static void setCorrespondingXYCBInImageForDataBit(int bitIndex, LockBitmap image, List<LockBitmap.ColorComponent> colorsToUse, 
+        private static void setCorrespondingXYCBInImageForDataBit(int bitIndex, LockBitmap image, int colorsCount, int bitsPerByte,  
             out int x, out int y, out int c, out int b)
         {
             int r;
-            int pixelCount = image.Width * image.Height;
-            int bytesToUse = pixelCount * colorsToUse.Count;
+            b = bitIndex % bitsPerByte;
+            r = bitIndex / bitsPerByte;
 
-            b = bitIndex / bytesToUse;
-            r = bitIndex % bytesToUse;
+            c = r % colorsCount;
+            r = r / colorsCount;
 
-            c = r / pixelCount;
-            r = r % pixelCount;
-
-            y = r / image.Width;
             x = r % image.Width;
+            y = r / image.Width;
         }
 
         public static Tuple<byte[], string> extractData(Bitmap hostImage,
@@ -175,7 +170,7 @@ namespace images_steganography
             int i, x, y, c, b;
             for (i = 0; i < headerLengthInBits; i++)
             { 
-                setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse, out x, out y, out c, out b);
+                setCorrespondingXYCBInImageForDataBit(i, imageData, colorsToUse.Count, bitsPerByte, out x, out y, out c, out b);
                 headerBits[i] = getBit(imageData.GetColorComponent(x, y, colorsToUse[c]), b);
             }
 
@@ -208,7 +203,7 @@ namespace images_steganography
                     int ii, xx, yy, cc, bb;
                     for (ii = (int) startIndex; ii < end && ii < dataSizeInBits; ii++)
                     {
-                        setCorrespondingXYCBInImageForDataBit(ii + headerLengthInBits, imageData, colorsToUse, out xx, out yy, out cc, out bb);
+                        setCorrespondingXYCBInImageForDataBit(ii + headerLengthInBits, imageData, colorsToUse.Count, bitsPerByte, out xx, out yy, out cc, out bb);
                         dataBits[ii] = getBit(imageData.GetColorComponent(xx, yy, colorsToUse[cc]), bb);
                     }
                 });
